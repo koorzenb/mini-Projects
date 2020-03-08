@@ -10,9 +10,9 @@ function makePizza(toppings = []){
         }
     }
     );
-}
+} 
 
-// //sequencially
+// //sequencially 
 // makePizza(['pepperoni'])
 //     .then((pizza)=>{
 //         console.log(pizza);
