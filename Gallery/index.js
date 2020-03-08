@@ -16,8 +16,39 @@ function Gallery(gallery) {
             console.info('Modal already open');
             return;
         }
+        modal.classList.add('open');        
+        window.addEventListener('keyup', handleKeyUp);
+        nextButton.addEventListener('click',showNextImage);        
+        prevButton.addEventListener('click',showPrevImage);        
+    }
+    
+    function closeModal(){
+        modal.classList.remove('open');        
+        window.removeEventListener('keyup', handleKeyUp);
+        nextButton.removeEventListener('click', handleClickOutside);
+        prevButton.removeEventListener('click',showPrevImage);        
     }
 
+    function handleClickOutside(e){
+        (e.target) === e.currentTarget ? closeModal() : "";
+        console.log(e.target);
+        // console.log(e.currentTarget);
+    }
+
+    function handleKeyUp(e) {
+        if (e.key === `Escape`) return closeModal();
+        if (e.key === `ArrowRight`) return showNextImage();
+        if (e.key === `ArrowLeft`) return showPrevImage();
+        
+    }
+
+    function showNextImage() {
+        showImage(currentImage.nextElementSibling || gallery.firstElementChild);
+    }
+
+    function showPrevImage() {
+        showImage(currentImage.previousElementSibling || gallery.lastElementChild);
+    }
     function showImage(el) {
         if(!el){
             console.info('no image');
@@ -28,11 +59,23 @@ function Gallery(gallery) {
         modal.querySelector('h2').textContent = el.title;
         modal.querySelector('figure p').textContent = el.dataset.description;
         currentImage = el ;
+        openModal();
     }
 
     images.forEach(image => image.addEventListener('click', e => 
             showImage(e.currentTarget))    
     );
+    
+    images.forEach(image => 
+        image.addEventListener('keyup', e => {
+            if (e.key === 'Enter') {
+                 showImage(e.currentTarget);
+            }
+        })
+    );
+    
+    modal.addEventListener('click', handleClickOutside);
+    
 }
 
 const gallery1 = Gallery(document.querySelector('.gallery1'));
