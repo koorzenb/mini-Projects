@@ -39,21 +39,35 @@ function makePizza(toppings = []){
 //     console.log(pizzas);
 // });
 
-function handleError(err) {
-    console.log(err);
+// // error handling
+// function handleError(err) {
+//     console.log(err);
+// }
+
+// makePizza(['ham','cheese','pepperoni','feta','pineapple']).then(pizza => {
+//     console.log(pizza)
+// }).catch(handleError);
+
+// const p1 = makePizza(['ham']);
+// const p2 = makePizza(['pineapple']);
+
+// const dinnerPromise = Promise.allSettled([p1,p2]);
+
+// dinnerPromise.then(results => {
+//     console.log(results);
+// });
+
+// async
+async function makeDinner() {
+    console.log('starting');    
+    const pizza1 = makePizza(['pepperoni']);
+    const pizza2 = makePizza(['ham','cheese'])
+
+    const dinner = await Promise.all([pizza1, pizza2]);
+    console.log(dinner);
+    
 }
 
-makePizza(['ham','cheese','pepperoni','feta','pineapple']).then(pizza => {
-    console.log(pizza)
-}).catch(handleError);
-
-const p1 = makePizza(['ham']);
-const p2 = makePizza(['pineapple']);
-
-const dinnerPromise = Promise.allSettled([p1,p2]);
-
-dinnerPromise.then(results => {
-    console.log(results);
-});
+makeDinner();
     
 

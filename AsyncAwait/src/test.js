@@ -9,5 +9,4 @@ async function go(){
     await wait(2000);
     console.log('Done');
 }
-
 go();
