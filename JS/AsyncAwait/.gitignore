@@ -5,5 +5,12 @@ yarn-error.log
 /coverage/
 /dist/
 /publish/
-/idea/
-/build/
+/extras/
+/webcomponents/
+/.vscode/
+.eslintrc
+test.html
+test.js
+*.json
+*.jpg
+*.png
