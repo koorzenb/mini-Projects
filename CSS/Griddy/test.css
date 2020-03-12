@@ -6,6 +6,10 @@ p {
 
 .container {
   display: grid;
-  grid-template-columns: 100px 100px 100px;
   gap: 20px;
+  grid-template-columns: repeat(auto-fit, 150px);
+}
+
+.item4 {
+  grid-column-end: -1;
 }
