@@ -1,0 +1,46 @@
+/* .container {
+  display: grid;
+  grid-template-columns: 1fr 500px 1fr;
+  grid-template-rows: 150px 150px 100px;
+  gap: 20px;
+  grid-template-areas:
+    "sidebar1 content sidebar2"
+    "sidebar1 content sidebar2"
+    "footer footer footer";
+
+  /* open up Firefox dev tools to turn on div.container overlay to view grid area names */
+
+/* Use a "." to create empty area like : "footer footer ." */
+
+/* .item1 {
+  grid-area: sidebar1;
+}
+
+.item3 {
+  grid-area: footer;
+}  */
+
+.container {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr 500px 1fr;
+  grid-template-rows: 150px 150px 100px;
+  grid-template-areas:
+    "blah blah blah meh meh meh"
+    "blah blah blah meh meh meh"
+    "blah blah blah meh meh meh"
+    "blah blah blah meh meh meh"
+    "blah blah blah meh meh meh";
+}
+
+.item3 {
+  grid-area: blah;
+}
+
+.item4 {
+  grid-area: meh;
+}
+
+.item5 {
+  grid-column: blah / meh;
+}
