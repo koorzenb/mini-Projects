@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: 20px;
+    grid-auto-flow: dense;
 }
 
 .item:nth-child(6n) {
@@ -21,5 +22,5 @@
 
 .item18 {
     background-color: green !important;
-    grid-column-end: -1 important;
+    grid-column-end: -1 !important;
 }
