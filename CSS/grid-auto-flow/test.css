@@ -18,3 +18,8 @@
     background-color: #fff;
     grid-row: span 2;
 }
+
+.item18 {
+    background-color: green !important;
+    grid-column-end: -1 important;
+}
