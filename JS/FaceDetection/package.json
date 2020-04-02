@@ -1,12 +1,18 @@
 {
-  "name": "test",
+  "name": "pixelated-face",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "pixelated-face.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ws --spa ./index.html"
+    "start": "parcel ./face.html"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "browserslist": [
+    "last 1 Chrome version"
+  ],
+  "dependencies": {
+    "facedetector": "^1.0.1",
+    "parcel": "^2.0.0-alpha.2.1"
+  }
 }
