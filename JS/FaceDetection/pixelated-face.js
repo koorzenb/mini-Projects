@@ -15,10 +15,13 @@ console.log(video, canvas, faceCanvas, faceDetector);
 //   SCALE: 1.35,
 // };
 
-function populateVideo(){
-  const stream = navigator.mediaDevices.getUserMedia({
+async function populateVideo(){
+  const stream = await navigator.mediaDevices.getUserMedia({
     video: {width: 1280, height: 720}
   });
+  video.srcObject = stream;
+  await video.play();
 }
 
 populateVideo();
+got up to 19 min
