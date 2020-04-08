@@ -8,6 +8,7 @@ yarn-error.log
 /publish/
 /idea/
 /build/
+/.parcel-cache/
 *.png
 *.svg
 
