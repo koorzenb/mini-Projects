@@ -8,8 +8,7 @@ const SCALE = 1.2;
 const SIZE = 10;
 console.log(video, canvas, faceCanvas, faceDetector);
 
-up to 31min
-
+got up to 35 censor
 // const optionsInputs = document.querySelectorAll(
 //   '.controls input[type="range"]'
 // );
@@ -42,7 +41,10 @@ async function detect() {
 function drawFace(face) {
   const {width, height, top, left } = face.boundingBox;
   console.log({width, height, top, left });
-  
+  ctx.clearRect(0,0,canvas.width, canvas.height)
+  ctx.strokeStyle = 'yellow';
+ctx.lineWidth = 2;
+  ctx.strokeRect(left, top, width, height)
 }
 
-populateVideo().then(detect);
+populateVideo().then(detect); 
