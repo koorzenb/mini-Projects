@@ -1,0 +1,45 @@
+:root {
+  --rowNum: 3;
+  --colNum: 3;
+}
+
+html,
+body {
+  padding: 0px;
+  margin: 0px;
+  width: 100vw;
+  height: 100wh;
+  border: 1px solid gray;
+  display: grid;
+  grid-template-rows: repeat(var(--rowNum), 20px);
+  grid-template-columns: repeat(var(--colNum), 300px);
+  /* not going to use gt-areas since layout wont change  */
+}
+
+header, div[role='field'],
+div[role='cell'] {
+  align-items: right;
+  justify-content: center;
+}
+
+/* first two columns are sticky */
+header, primary
+ {
+  display: grid;
+  grid-row: 1 / 2;
+}
+
+header {
+  background-color: aqua;
+  align-items: center;
+  justify-content: center;
+}
+
+div[role='field'] {
+  background-color: gray;
+  grid-auto-flow: column;
+}
+
+div[role='cell'] {
+  background-color: orange;
+}
