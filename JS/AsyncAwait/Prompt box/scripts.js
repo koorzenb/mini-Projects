@@ -44,9 +44,9 @@ async function destroyPopup(popup) {
   }
 
 
-  got to 31:40 
+  // got to 31:40 
 
-  function askQuestion(e) {
+  async function askQuestion(e) {
     const button = e.currentTarget;
     const cancel = button.hasAttribute('data-cancel');
       
