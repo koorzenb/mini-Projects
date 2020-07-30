@@ -12,7 +12,7 @@ function start(params) {
     recog.interimResults = true;
     recog.onresult = handleResult;
     recog.start();
-    08:52
+    12:00
 }
 
 start();
