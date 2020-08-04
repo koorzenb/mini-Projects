@@ -1,6 +1,15 @@
 import { handleResult } from "./handlers";
+import { colors } from "./colors";
  
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const colorsEl = document.querySelector(".colors");
+
+function displayColors(myColors) {
+    return myColors.map(color => {
+        return `<span class='color' style="background: ${color}">${color}</span>`;
+    }).join('');
+    // 19:12 
+}
 
 function start(params) {
     if(!("SpeechRecognition" in window)) {
@@ -12,7 +21,10 @@ function start(params) {
     recog.interimResults = true;
     recog.onresult = handleResult;
     recog.start();
-    12:00
 }
 
 start();
+
+const newCOlors = Object.keys(colors)
+console.log(newCOlors);
+colorsEl.innerHTML = displayColors(newCOlors);
