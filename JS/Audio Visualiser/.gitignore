@@ -1,0 +1,14 @@
+/node_modules/
+\.cache\
+/.cache/
+package-lock.json
+yarn.lock
+yarn-error.log
+/coverage/
+/dist/
+/publish/
+/idea/
+/build/
+*.png
+*.svg
+
