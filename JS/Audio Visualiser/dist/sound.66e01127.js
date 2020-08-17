@@ -118,8 +118,51 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   return newRequire;
 })({"sound.js":[function(require,module,exports) {
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
-},{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var WIDTH = 2500;
+var HEIGHT = 2500;
+var canvas = document.querySelector('canvas');
+var ctx = canvas.getContext('2d');
+canvas.height = HEIGHT;
+canvas.width = WIDTH;
+var analyzer;
+
+function getAudio() {
+  return _getAudio.apply(this, arguments);
+}
+
+function _getAudio() {
+  _getAudio = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+    var stream, audioCtx, source;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return navigator.mediaDevices.getUserMedia({
+              audio: true
+            });
+
+          case 2:
+            stream = _context.sent;
+            audioCtx = new AudioContext();
+            analyzer = audioCtx.createAnalyser();
+            source = audioCtx.createMediaStreamSource(stream);
+            source.connect(analyzer);
+
+          case 7:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+  return _getAudio.apply(this, arguments);
+}
+},{}],"../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -147,7 +190,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59835" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52774" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -323,5 +366,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel-bundler/src/builtins/hmr-runtime.js","sound.js"], null)
+},{}]},{},["../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","sound.js"], null)
 //# sourceMappingURL=/sound.66e01127.js.map
