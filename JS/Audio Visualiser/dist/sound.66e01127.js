@@ -130,13 +130,17 @@ canvas.height = HEIGHT;
 canvas.width = WIDTH;
 var analyzer;
 
+function handleError(err) {
+  console.error("Please give access to mic in order to proceed");
+}
+
 function getAudio() {
   return _getAudio.apply(this, arguments);
 }
 
 function _getAudio() {
   _getAudio = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    var stream, audioCtx, source;
+    var stream, audioCtx, source, frequencyData;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -144,7 +148,7 @@ function _getAudio() {
             _context.next = 2;
             return navigator.mediaDevices.getUserMedia({
               audio: true
-            });
+            }).catch(handleError);
 
           case 2:
             stream = _context.sent;
@@ -152,8 +156,11 @@ function _getAudio() {
             analyzer = audioCtx.createAnalyser();
             source = audioCtx.createMediaStreamSource(stream);
             source.connect(analyzer);
+            analyzer.fftSize = Math.pow(2, 10);
+            frequencyData = new Uint8Array(analyzer.frequencyBinCount);
+            console.log(frequencyData);
 
-          case 7:
+          case 10:
           case "end":
             return _context.stop();
         }
@@ -162,6 +169,16 @@ function _getAudio() {
   }));
   return _getAudio.apply(this, arguments);
 }
+
+function drawTimeData(timeData) {
+  analyzer.getByteTimeData(timeData);
+  console.log(timeData);
+  requestAnimationFrame(function () {
+    return drawTimeData(timeData);
+  });
+}
+
+getAudio();
 },{}],"../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -190,7 +207,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52774" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51376" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
