@@ -23,12 +23,13 @@ async function getAudio() {
     const frequencyData = new Uint8Array(bufferLength);
     drawTimeData(timeData);
 } 
+// until 29:00
 
 function drawTimeData(timeData) {
     analyzer.getByteTimeDomainData(timeData);
-    console.log(timeData);
+    ctx.clearRect(0,0,WIDTH,HEIGHT);
     ctx.lineWidth = 10;
-    ctx.strokeStyle = '#ffc600'
+    ctx.strokeStyle = '#ffc600';
     ctx.beginPath();
     const sliceWidth = WIDTH/ bufferLength;
     let x = 0;
@@ -45,7 +46,7 @@ function drawTimeData(timeData) {
     })
     ctx.stroke();
     requestAnimationFrame(() => drawTimeData(timeData))
-    // until 23:40
+    
 }
 
 getAudio();
