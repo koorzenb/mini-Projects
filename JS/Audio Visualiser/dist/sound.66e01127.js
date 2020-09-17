@@ -117,21 +117,68 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"sound.js":[function(require,module,exports) {
+})({"utils.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.hslToRgb = hslToRgb;
+
+function hslToRgb(h, s, l) {
+  var r;
+  var g;
+  var b;
+
+  if (s == 0) {
+    r = g = b = l; // achromatic
+  } else {
+    var hue2rgb = function hue2rgb(p, q, t) {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    };
+
+    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    var p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1 / 3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1 / 3);
+  }
+
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+},{}],"sound.js":[function(require,module,exports) {
+"use strict";
+
+var _utils = require("./utils");
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var WIDTH = 2500;
-var HEIGHT = 2500;
-var canvas = document.querySelector('canvas');
-var ctx = canvas.getContext('2d');
-canvas.height = HEIGHT;
+var WIDTH = 1500;
+var HEIGHT = 1500;
+var canvas = document.querySelector("canvas");
+var ctx = canvas.getContext("2d");
 canvas.width = WIDTH;
+canvas.height = HEIGHT;
 var analyzer;
+var bufferLength;
 
 function handleError(err) {
-  console.error("Please give access to mic in order to proceed");
+  console.log("You must give access to your mic in order to proceed");
 }
 
 function getAudio() {
@@ -140,7 +187,7 @@ function getAudio() {
 
 function _getAudio() {
   _getAudio = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    var stream, audioCtx, source, frequencyData;
+    var stream, audioCtx, source, timeData, frequencyData;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -155,12 +202,18 @@ function _getAudio() {
             audioCtx = new AudioContext();
             analyzer = audioCtx.createAnalyser();
             source = audioCtx.createMediaStreamSource(stream);
-            source.connect(analyzer);
-            analyzer.fftSize = Math.pow(2, 10);
-            frequencyData = new Uint8Array(analyzer.frequencyBinCount);
-            console.log(frequencyData);
+            source.connect(analyzer); // How much data should we collect
 
-          case 10:
+            analyzer.fftSize = Math.pow(2, 8); // pull the data off the audio
+            // how many pieces of data are there?!?
+
+            bufferLength = analyzer.frequencyBinCount;
+            timeData = new Uint8Array(bufferLength);
+            frequencyData = new Uint8Array(bufferLength);
+            drawTimeData(timeData);
+            drawFrequency(frequencyData);
+
+          case 13:
           case "end":
             return _context.stop();
         }
@@ -171,15 +224,67 @@ function _getAudio() {
 }
 
 function drawTimeData(timeData) {
-  analyzer.getByteTimeData(timeData);
-  console.log(timeData);
+  // inject the time data into our timeData array
+  analyzer.getByteTimeDomainData(timeData); // now that we have the data, lets turn it into something visual
+  // 1. Clear the canvas TODO
+
+  ctx.clearRect(0, 0, WIDTH, HEIGHT); // 2. setup some canvas drawing
+
+  ctx.lineWidth = 10;
+  ctx.strokeStyle = "#ffc600";
+  ctx.beginPath();
+  var sliceWidth = WIDTH / bufferLength;
+  var x = 0;
+  timeData.forEach(function (data, i) {
+    var v = data / 128;
+    var y = v * HEIGHT / 2; // draw our lines
+
+    if (i === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+
+    x += sliceWidth;
+  });
+  ctx.stroke(); // call itself as soon as possible
+
   requestAnimationFrame(function () {
     return drawTimeData(timeData);
   });
 }
 
+function drawFrequency(frequencyData) {
+  // get the frequency data into our frequencyData array
+  analyzer.getByteFrequencyData(frequencyData); // figure out the bar width
+
+  var barWidth = WIDTH / bufferLength * 2.5;
+  var x = 0;
+  frequencyData.forEach(function (amount) {
+    // 0 to 255
+    var percent = amount / 255;
+    var h = 360 / (percent * 360) - 0.5,
+        s = 0.8,
+        l = 0.5;
+    var barHeight = HEIGHT * percent * 0.5; // TODO: Convert the colour to HSL TODO
+
+    var _hslToRgb = (0, _utils.hslToRgb)(h, s, l),
+        _hslToRgb2 = _slicedToArray(_hslToRgb, 3),
+        r = _hslToRgb2[0],
+        g = _hslToRgb2[1],
+        b = _hslToRgb2[2];
+
+    ctx.fillStyle = "rgb(".concat(r, ",").concat(g, ",").concat(b, ")");
+    ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+    x += barWidth + 2;
+  });
+  requestAnimationFrame(function () {
+    return drawFrequency(frequencyData);
+  });
+}
+
 getAudio();
-},{}],"../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./utils":"utils.js"}],"../../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -207,7 +312,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51376" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60311" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
