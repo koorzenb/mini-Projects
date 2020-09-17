@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "sound.js",
-  "browserlist": "last 1 chrome version",
+  "browserslist": [
+    "last 1 Chrome versions"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel ./index.html"
